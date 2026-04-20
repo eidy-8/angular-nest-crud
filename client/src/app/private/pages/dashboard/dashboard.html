@@ -1,1 +1,198 @@
-<p>dashboard works!</p>
+<div class="p-4">
+  <!-- Header -->
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-heading mb-2">Dashboard Fake</h1>
+    <p class="text-body">Bem-vindo ao seu painel de controle</p>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- Card 1 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6 dashboard-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-body text-sm font-medium">Total de Usuários</p>
+          <p class="text-2xl font-bold text-heading">{{ stats().totalUsers.toLocaleString('pt-BR') }}</p>
+        </div>
+        <div class="p-3 bg-brand-medium rounded-base">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-green-600 text-sm font-medium">+12.5%</span>
+        <span class="text-body text-sm ml-2">vs mês passado</span>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6 dashboard-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-body text-sm font-medium">Receita Total</p>
+          <p class="text-2xl font-bold text-heading">{{ formatCurrency(stats().totalRevenue) }}</p>
+        </div>
+        <div class="p-3 bg-green-500 rounded-base">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-green-600 text-sm font-medium">+8.2%</span>
+        <span class="text-body text-sm ml-2">vs mês passado</span>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6 dashboard-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-body text-sm font-medium">Pedidos Hoje</p>
+          <p class="text-2xl font-bold text-heading">{{ stats().todayOrders }}</p>
+        </div>
+        <div class="p-3 bg-blue-500 rounded-base">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-red-600 text-sm font-medium">-2.1%</span>
+        <span class="text-body text-sm ml-2">vs ontem</span>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6 dashboard-card">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-body text-sm font-medium">Taxa de Conversão</p>
+          <p class="text-2xl font-bold text-heading">{{ formatPercentage(stats().conversionRate) }}</p>
+        </div>
+        <div class="p-3 bg-purple-500 rounded-base">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="mt-4">
+        <span class="text-green-600 text-sm font-medium">+0.8%</span>
+        <span class="text-body text-sm ml-2">vs semana passada</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Chart 1 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6">
+      <h3 class="text-lg font-semibold text-heading mb-4">Vendas por Mês</h3>
+      <div class="h-64 flex items-end justify-between space-x-2">
+        <div class="flex-1 bg-brand-medium rounded-t chart-bar" style="height: 40%"></div>
+        <div class="flex-1 bg-brand rounded-t chart-bar" style="height: 60%"></div>
+        <div class="flex-1 bg-brand-strong rounded-t chart-bar" style="height: 80%"></div>
+        <div class="flex-1 bg-brand-medium rounded-t chart-bar" style="height: 55%"></div>
+        <div class="flex-1 bg-brand rounded-t chart-bar" style="height: 75%"></div>
+        <div class="flex-1 bg-brand-strong rounded-t chart-bar" style="height: 90%"></div>
+      </div>
+      <div class="flex justify-between mt-4 text-sm text-body">
+        <span>Jan</span>
+        <span>Fev</span>
+        <span>Mar</span>
+        <span>Abr</span>
+        <span>Mai</span>
+        <span>Jun</span>
+      </div>
+    </div>
+
+    <!-- Chart 2 -->
+    <div class="bg-neutral-primary border border-default rounded-base p-6">
+      <h3 class="text-lg font-semibold text-heading mb-4">Distribuição por Categoria</h3>
+      <div class="space-y-4">
+        <div class="flex items-center justify-between">
+          <span class="text-body">Eletrônicos</span>
+          <div class="flex items-center space-x-2">
+            <div class="w-32 bg-neutral-secondary-soft rounded-full h-2">
+              <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 75%"></div>
+            </div>
+            <span class="text-sm text-body">75%</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-body">Roupas</span>
+          <div class="flex items-center space-x-2">
+            <div class="w-32 bg-neutral-secondary-soft rounded-full h-2">
+              <div class="bg-green-500 h-2 rounded-full progress-bar" style="width: 60%"></div>
+            </div>
+            <span class="text-sm text-body">60%</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-body">Livros</span>
+          <div class="flex items-center space-x-2">
+            <div class="w-32 bg-neutral-secondary-soft rounded-full h-2">
+              <div class="bg-purple-500 h-2 rounded-full progress-bar" style="width: 45%"></div>
+            </div>
+            <span class="text-sm text-body">45%</span>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-body">Outros</span>
+          <div class="flex items-center space-x-2">
+            <div class="w-32 bg-neutral-secondary-soft rounded-full h-2">
+              <div class="bg-gray-500 h-2 rounded-full progress-bar" style="width: 20%"></div>
+            </div>
+            <span class="text-sm text-body">20%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Activity Table -->
+  <div class="bg-neutral-primary border border-default rounded-base overflow-hidden">
+    <div class="px-6 py-4 border-b border-default">
+      <h3 class="text-lg font-semibold text-heading">Atividades Recentes</h3>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="bg-neutral-secondary-soft">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-body uppercase tracking-wider">Usuário</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-body uppercase tracking-wider">Ação</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-body uppercase tracking-wider">Produto</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-body uppercase tracking-wider">Data</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-body uppercase tracking-wider">Status</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-default">
+          @for (activity of activities(); track activity.user.email) {
+            <tr class="table-row">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div class="w-8 h-8 {{ activity.user.avatarColor }} rounded-full flex items-center justify-center text-white text-sm font-medium avatar">
+                    {{ activity.user.initials }}
+                  </div>
+                  <div class="ml-3">
+                    <div class="text-sm font-medium text-heading">{{ activity.user.name }}</div>
+                    <div class="text-sm text-body">{{ activity.user.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-body">{{ activity.action }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-body">{{ activity.product }}</td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-body">{{ activity.date }}</td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span class="status-badge {{ getStatusColor(activity.status) }}">
+                  {{ activity.status === 'completed' ? 'Concluído' : activity.status === 'pending' ? 'Pendente' : 'Cancelado' }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
