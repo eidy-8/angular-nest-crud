@@ -13,6 +13,12 @@ export const PRIVATE_ROUTES: Routes = [
           import('./pages/dashboard/dashboard')
             .then(m => m.Dashboard)
       },
+      {
+        path: 'config-account',
+        loadComponent: () =>
+          import('./pages/config-account/config-account')
+            .then(m => m.ConfigAccount)
+      }
     ]
   }
 ];
