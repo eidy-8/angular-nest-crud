@@ -13,8 +13,8 @@
 
     <div class="z-50 hidden bg-neutral-primary-medium border border-default-medium rounded-base shadow-lg w-44" id="user-dropdown">
         <div class="px-4 py-3 text-sm border-b border-default">
-          <span class="block text-heading font-medium">Joseph McFall</span>
-          <span class="block text-body truncate">name@flowbite.com</span>
+          <span class="block text-heading font-medium">{{ userName }}</span>
+          <span class="block text-body">{{ userEmail }}</span>
         </div>
         <ul class="p-2 text-sm text-body font-medium" aria-labelledby="user-menu-button">
           <li>
@@ -24,7 +24,7 @@
             <a href="/user/config-account" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Configurar conta</a>
           </li>
           <li>
-            <a href="/" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Sair</a>
+            <a (click)="logout()" href="/" class="inline-flex items-center w-full p-2 hover:bg-neutral-tertiary-medium hover:text-heading rounded">Sair</a>
           </li>
         </ul>
     </div>
