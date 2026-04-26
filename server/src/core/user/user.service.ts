@@ -1,9 +1,9 @@
-import { ConflictException, Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { UserEntity } from 'src/db/entities/user.entity';
 import { Repository } from 'typeorm';
-import { User, CreateUserDto, LoginDto, AuthResponseDto } from './user.dto';
+import { User, CreateUserDto, LoginDto, AuthResponseDto, UpdateUserDto } from './user.dto';
 import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { AuthenticateService } from '../authenticate/authenticate.service';
@@ -24,7 +24,6 @@ export class UserService {
      * @returns Retorna o usuário criado com token JWT
      */
     async register(createUserDto: CreateUserDto): Promise<AuthResponseDto> {
-        // 1. Verifica se email já existe
         const existingUser = await this.usersRepository.findOne({ 
             where: { email: createUserDto.email } 
         });
@@ -33,10 +32,12 @@ export class UserService {
             throw new ConflictException('Email já está registrado!');
         }
 
-        // 2. Hash da senha com bcryptjs (salt rounds = 10)
+        if (createUserDto.password.length < 6) {
+            throw new ConflictException('Senha com mínimo 6 caracteres!');
+        }
+
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-        // 3. Cria novo usuário no banco
         const newUser = new UserEntity();
         newUser.email = createUserDto.email;
         newUser.password = hashedPassword;
@@ -45,22 +46,19 @@ export class UserService {
 
         const savedUser = await this.usersRepository.save(newUser);
 
-        // 4. Gera token JWT
         const access_token = this.jwtService.sign(
             { 
-                sub: savedUser.id, // subject = id do usuário
+                sub: savedUser.id,
                 email: savedUser.email 
             }
         );
 
-        // 5. Armazena sessão ativa no auth.authenticate
         await this.authenticateService.createSession(
             savedUser.id,
             access_token,
             new Date(Date.now() + this.getJwtExpirationMs())
         );
 
-        // 6. Retorna resposta com token e dados do usuário
         return {
             access_token,
             user: {
@@ -71,13 +69,38 @@ export class UserService {
         };
     }
 
+    async update(id: string, user: Partial<UpdateUserDto>) {
+        
+        const existingUser = await this.usersRepository.findOne({ where: { id: id } });
+        if (!existingUser) {
+            throw new NotFoundException('Usuário não encontrado');
+        }
+
+        const { ...userData } = user;
+
+        if (userData.password) {
+            if (userData.password.length < 6) {
+                throw new ConflictException('Senha com mínimo 6 caracteres!');
+            }
+
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+            userData.password = hashedPassword;            
+        }
+
+        userData.updated_at = new Date();
+
+        await this.usersRepository.update(id, userData);
+
+        return await this.usersRepository.findOne({ where: { id } });
+    }
+
     /**
      * LOGIN: Autentica usuário e retorna token JWT
      * @param loginDto email e password
      * @returns Token JWT e dados do usuário
      */
     async login(loginDto: LoginDto): Promise<AuthResponseDto> {
-        // 1. Busca usuário por email
         const user = await this.usersRepository.findOne({
             where: { email: loginDto.email }
         });
@@ -86,29 +109,25 @@ export class UserService {
             throw new UnauthorizedException('Email ou senha incorretos');
         }
 
-        // 2. Valida senha comparando com hash armazenado
         const isPasswordValid = await bcrypt.compare(loginDto.password, user.password);
 
         if (!isPasswordValid) {
             throw new UnauthorizedException('Email ou senha incorretos');
         }
 
-        // 3. Gera token JWT
         const access_token = this.jwtService.sign(
             { 
-                sub: user.id, // subject = id do usuário
+                sub: user.id,
                 email: user.email 
             }
         );
 
-        // 4. Armazena sessão ativa no auth.authenticate
         await this.authenticateService.createSession(
             user.id,
             access_token,
             new Date(Date.now() + this.getJwtExpirationMs())
         );        
 
-        // 5. Retorna resposta
         return {
             access_token,
             user: {
@@ -137,7 +156,6 @@ export class UserService {
             throw new BadRequestException('Usuário não encontrado');
         }
 
-        // Retorna sem a senha
         const { password, ...userWithoutPassword } = user;
         return userWithoutPassword;
     }

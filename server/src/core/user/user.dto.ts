@@ -1,5 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsOptional, IsString, IsUUID } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDate, IsOptional, IsString, IsUUID } from "class-validator";
 
 export class User {
     @IsUUID()
@@ -36,7 +37,7 @@ export class FindAllUsersParameters {
 
 /**
  * DTO para REGISTRO: Criar novo usuário
- * Valida email válido, senha mín 6 chars, nome obrigatório
+ * Valida email, senha mín 6 chars, nome obrigatório
  */
 export class CreateUserDto {
     @IsString()
@@ -50,6 +51,33 @@ export class CreateUserDto {
     @IsString()
     @ApiProperty({ example: 'João Silva', description: 'Nome completo do usuário' })
     name: string;
+}
+
+/**
+ * DTO para ATUALIZAÇÃO: Atualizar usuário
+ * Valida email, senha mín 6 chars, nome obrigatório
+ */
+export class UpdateUserDto {
+    @IsString()
+    @IsOptional()
+    @ApiProperty({ example: 'atualização@gmail.com', description: 'Email para atualização do usuário' })
+    email: string;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty({ example: 'senha123', description: 'Senha com mínimo 6 caracteres para atualização do usuário' })
+    password: string;
+
+    @IsString()
+    @IsOptional()
+    @ApiProperty({ example: 'João Silva', description: 'Nome completo para atualização do usuário' })
+    name: string;
+
+    @Type(() => Date)
+    @IsDate()
+    @IsOptional()
+    @ApiProperty({ example: new Date() })
+    updated_at: Date;
 }
 
 /**

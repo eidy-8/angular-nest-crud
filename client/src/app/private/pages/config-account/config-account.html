@@ -1,19 +1,28 @@
 
 <div class="bg-neutral-primary-soft p-6 border border-default rounded-base shadow-xs max-w-md mx-auto">
-    <form class="mx-auto">
+    <form [formGroup]="userForm" (ngSubmit)="updateUser()" class="mx-auto">
       <h5 class="text-xl font-semibold text-heading mb-6">Alterar dados da conta</h5>
       <div class="mb-5">
         <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Nome</label>
-        <input type="name" id="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
+        <input type="name" id="name" formControlName="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
       </div>
       <div class="mb-5">
         <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Email</label>
-        <input type="email" id="email" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
+        <input type="email" id="email" formControlName="email" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
       </div>
       <div class="mb-5">
         <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Senha</label>
-        <input type="password" id="password" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
+        <input type="password" id="password" formControlName="password" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body"/>
       </div>
       <button type="submit" class="text-white bg-brand box-border border border-transparent hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Entrar</button>
     </form>
+
+    <br>
+
+    @if (alertMessage) {
+      <div class="flex items-start sm:items-center p-4 mb-4 text-sm text-fg-danger-strong rounded-base bg-danger-soft" role="alert">
+        <svg class="w-4 h-4 me-2 shrink-0 mt-0.5 sm:mt-0" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+        <p>{{ alertMessage }}</p>
+      </div>
+    }
 </div>

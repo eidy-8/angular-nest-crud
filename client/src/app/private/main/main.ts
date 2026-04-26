@@ -15,7 +15,6 @@ export class Main implements OnInit {
   protected unsubscribe = new Subject<void>();
 
   protected userName!: string; 
-
   protected userEmail!: string;
 
   constructor(public apidata: ApiData, private router: Router, private cdr: ChangeDetectorRef) { }

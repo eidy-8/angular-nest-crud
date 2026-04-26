@@ -27,7 +27,6 @@ interface RecentActivity {
   styleUrl: './dashboard.css',
 })
 export class Dashboard {
-  // Dashboard statistics
   stats = signal<DashboardStats>({
     totalUsers: 1234,
     totalRevenue: 45678,
@@ -35,7 +34,6 @@ export class Dashboard {
     conversionRate: 3.24
   });
 
-  // Recent activities
   activities = signal<RecentActivity[]>([
     {
       user: {
@@ -87,7 +85,6 @@ export class Dashboard {
     }
   ]);
 
-  // Helper method to get status color
   getStatusColor(status: string): string {
     switch (status) {
       case 'completed':
@@ -101,7 +98,6 @@ export class Dashboard {
     }
   }
 
-  // Helper method to format currency
   formatCurrency(value: number): string {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -109,7 +105,6 @@ export class Dashboard {
     }).format(value);
   }
 
-  // Helper method to format percentage
   formatPercentage(value: number): string {
     return `${value.toFixed(2)}%`;
   }

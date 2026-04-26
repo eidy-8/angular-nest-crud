@@ -1,10 +1,10 @@
-import { Body, Controller, Post, Get, UseGuards, Request } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards, Request, Param, Put } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiTags, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { CreateUserDto, LoginDto, AuthResponseDto } from './user.dto';
+import { ApiOperation, ApiTags, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import { CreateUserDto, LoginDto, AuthResponseDto, UpdateUserDto, User } from './user.dto';
 import { AutenticacaoGuard } from 'src/guards/autenticacao.guard';
 
-@ApiTags('Usuários & Autenticação') // Agrupa no Swagger
+@ApiTags('Usuários & Autenticação')
 @Controller('user')
 export class UserController {
 
@@ -30,8 +30,27 @@ export class UserController {
         status: 409, 
         description: 'Email já registrado' 
     })
-    async register(@Body() createUserDto: CreateUserDto): Promise<AuthResponseDto> {
+    register(@Body() createUserDto: CreateUserDto): Promise<AuthResponseDto> {
         return this.userService.register(createUserDto);
+    }
+
+    @Put('/:id')
+    @ApiOperation({ 
+        summary: 'Atualizar dados do usuário',
+        description: 'Atualiza um usuário com email, senha ou nome.'
+    })
+    @ApiResponse({ 
+        status: 201, 
+        description: 'Usuário atualizado com sucesso',
+        type: AuthResponseDto 
+    })
+    @ApiResponse({ 
+        status: 406, 
+        description: 'Dados inválidos' 
+    })
+    @ApiBody({ type: UpdateUserDto, description: 'Dados do usuário para atualização' })
+    update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+        return this.userService.update(id, updateUserDto);
     }
 
     /**
@@ -54,7 +73,7 @@ export class UserController {
         status: 401, 
         description: 'Email ou senha incorretos' 
     })
-    async login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
+    login(@Body() loginDto: LoginDto): Promise<AuthResponseDto> {
         return this.userService.login(loginDto);
     }
 
@@ -65,8 +84,8 @@ export class UserController {
      * Response: Dados do usuário autenticado
      */
     @Get('me')
-    @UseGuards(AutenticacaoGuard) // ← Aqui ativa o guard JWT!
-    @ApiBearerAuth('JWT') // ← Mostra no Swagger que precisa de token
+    @UseGuards(AutenticacaoGuard) 
+    @ApiBearerAuth('JWT')
     @ApiOperation({ 
         summary: 'Obter dados do usuário autenticado',
         description: 'Retorna os dados do usuário baseado no token JWT fornecido. REQUER TOKEN!'
@@ -79,10 +98,8 @@ export class UserController {
         status: 401, 
         description: 'Token não fornecido ou inválido' 
     })
-    async getMe(@Request() req: any) {
-        // req.user é preenchido pelo AutenticacaoGuard
-        // Contém { sub: userId, email: userEmail }
-        const user = await this.userService.findById(req.user.sub);
+    getMe(@Request() req: any) {
+        const user = this.userService.findById(req.user.sub);
         return user;
     }
 }
