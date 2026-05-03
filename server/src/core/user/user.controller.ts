@@ -30,7 +30,7 @@ export class UserController {
         status: 409, 
         description: 'Email já registrado' 
     })
-    register(@Body() createUserDto: CreateUserDto): Promise<AuthResponseDto> {
+    register(@Body() createUserDto: CreateUserDto): Promise<void> {
         return this.userService.register(createUserDto);
     }
 

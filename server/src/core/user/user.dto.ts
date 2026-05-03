@@ -6,33 +6,33 @@ export class User {
     @IsUUID()
     @IsOptional()
     @ApiProperty({ example: null })
-    id: string;
+    id!: string;
 
     @IsString()
     @ApiProperty({ example: 'teste@gmail.com' })
-    email: string;
+    email!: string;
 
     @IsString()
     @ApiProperty({ example: 'senhateste' })
-    password: string;
+    password!: string;
 
     @IsString()
     @ApiProperty({ example: 'Teste Do Teste' })
-    name: string;
+    name!: string;
 }
 
 export class FindAllUsersParameters {
     @IsString()
     @IsOptional()
-    page: string;
+    page!: string;
     
     @IsString()
     @IsOptional()
-    pageSize: string;
+    pageSize!: string;
     
     @IsString()
     @IsOptional()
-    filter: string;
+    filter!: string;
 }
 
 /**
@@ -42,15 +42,15 @@ export class FindAllUsersParameters {
 export class CreateUserDto {
     @IsString()
     @ApiProperty({ example: 'novo@gmail.com', description: 'Email único do usuário' })
-    email: string;
+    email!: string;
 
     @IsString()
-    @ApiProperty({ example: 'senha123', description: 'Senha com mínimo 6 caracteres' })
-    password: string;
+    @ApiProperty({ example: 'senha123', description: 'Senha com mínimo 8 caracteres' })
+    password!: string;
 
     @IsString()
     @ApiProperty({ example: 'João Silva', description: 'Nome completo do usuário' })
-    name: string;
+    name!: string;
 }
 
 /**
@@ -61,23 +61,23 @@ export class UpdateUserDto {
     @IsString()
     @IsOptional()
     @ApiProperty({ example: 'atualização@gmail.com', description: 'Email para atualização do usuário' })
-    email: string;
+    email!: string;
 
     @IsString()
     @IsOptional()
-    @ApiProperty({ example: 'senha123', description: 'Senha com mínimo 6 caracteres para atualização do usuário' })
-    password: string;
+    @ApiProperty({ example: 'senha123', description: 'Senha com mínimo 8 caracteres para atualização do usuário' })
+    password!: string;
 
     @IsString()
     @IsOptional()
     @ApiProperty({ example: 'João Silva', description: 'Nome completo para atualização do usuário' })
-    name: string;
+    name!: string;
 
     @Type(() => Date)
     @IsDate()
     @IsOptional()
     @ApiProperty({ example: new Date() })
-    updated_at: Date;
+    updated_at!: Date;
 }
 
 /**
@@ -87,11 +87,11 @@ export class UpdateUserDto {
 export class LoginDto {
     @IsString()
     @ApiProperty({ example: 'usuario@gmail.com', description: 'Email do usuário' })
-    email: string;
+    email!: string;
 
     @IsString()
     @ApiProperty({ example: 'senha123', description: 'Senha do usuário' })
-    password: string;
+    password!: string;
 }
 
 /**
@@ -100,13 +100,13 @@ export class LoginDto {
  */
 export class AuthResponseDto {
     @ApiProperty({ example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...', description: 'Token JWT para autenticação' })
-    access_token: string;
+    access_token!: string;
 
-    @ApiProperty({ 
+    @ApiProperty({
         example: { id: 'uuid-123', email: 'usuario@gmail.com', name: 'João' },
         description: 'Dados do usuário autenticado'
     })
-    user: {
+    user!: {
         id: string;
         email: string;
         name: string;

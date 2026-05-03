@@ -16,6 +16,8 @@ import { ApiData } from '../../../auth/services/api-data';
 export class ConfigAccount {
 
   alertMessage: string | null = null;
+
+  successAlertMessage: string | null = null;
   
   private unsubscribe = new Subject<void>();
 
@@ -81,7 +83,8 @@ export class ConfigAccount {
 
     this.user.update(this.userId, this.userForm.value).pipe( takeUntil( this.unsubscribe ) ).subscribe({
       next: () => {
-        this.alertMessage = 'Usuário atualizado com sucesso' //temporário
+        this.successAlertMessage = 'Usuário atualizado com sucesso'
+        this.alertMessage = null;
         this.cdr.detectChanges();
       },
       error: error => {

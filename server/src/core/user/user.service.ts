@@ -23,7 +23,7 @@ export class UserService {
      * @param createUserDto email, password, name
      * @returns Retorna o usuário criado com token JWT
      */
-    async register(createUserDto: CreateUserDto): Promise<AuthResponseDto> {
+    async register(createUserDto: CreateUserDto): Promise<void> {
         const existingUser = await this.usersRepository.findOne({ 
             where: { email: createUserDto.email } 
         });
@@ -32,8 +32,8 @@ export class UserService {
             throw new ConflictException('Email já está registrado!');
         }
 
-        if (createUserDto.password.length < 6) {
-            throw new ConflictException('Senha com mínimo 6 caracteres!');
+        if (createUserDto.password.length < 8) {
+            throw new ConflictException('Senha com mínimo 8 caracteres!');
         }
 
         const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
@@ -44,29 +44,7 @@ export class UserService {
         newUser.name = createUserDto.name;
         newUser.created_at = new Date();
 
-        const savedUser = await this.usersRepository.save(newUser);
-
-        const access_token = this.jwtService.sign(
-            { 
-                sub: savedUser.id,
-                email: savedUser.email 
-            }
-        );
-
-        await this.authenticateService.createSession(
-            savedUser.id,
-            access_token,
-            new Date(Date.now() + this.getJwtExpirationMs())
-        );
-
-        return {
-            access_token,
-            user: {
-                id: savedUser.id,
-                email: savedUser.email,
-                name: savedUser.name
-            }
-        };
+        await this.usersRepository.save(newUser);
     }
 
     async update(id: string, user: Partial<UpdateUserDto>) {
@@ -79,8 +57,8 @@ export class UserService {
         const { ...userData } = user;
 
         if (userData.password) {
-            if (userData.password.length < 6) {
-                throw new ConflictException('Senha com mínimo 6 caracteres!');
+            if (userData.password.length < 8) {
+                throw new ConflictException('Senha com mínimo 8 caracteres!');
             }
 
             const hashedPassword = await bcrypt.hash(userData.password, 10);
