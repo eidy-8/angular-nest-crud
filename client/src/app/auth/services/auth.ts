@@ -25,7 +25,6 @@ export class Auth implements OnDestroy {
             resolve(this.authenticated);
           },
           error: () => {
-            console.log("Não foi possível processar sua requisição");
             resolve(false);
           }
         });

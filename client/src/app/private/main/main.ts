@@ -39,7 +39,6 @@ export class Main implements OnInit {
         this.cdr.detectChanges();
       },
       error: () => {
-        console.log("Não foi possível processar sua requisição");
       }
     });
   };

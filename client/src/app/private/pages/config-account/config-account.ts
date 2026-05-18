@@ -60,7 +60,6 @@ export class ConfigAccount {
         this.cdr.detectChanges();
       },
       error: () => {
-        console.log("Não foi possível processar sua requisição");
       }
     });
   };
